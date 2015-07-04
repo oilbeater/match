@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<!-- release v4.2.3, copyright 2014 - 2015 Kartik Visweswaran -->
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Krajee JQuery Plugins - &copy; Kartik</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+        <link href="fileinput.css" media="all" rel="stylesheet" type="text/css" />
+        <script src="http://libs.useso.com/js/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js" type="text/javascript"></script>
+    </head>
+	
+    <script type="text/javascript">  
+		var idA,idB,textA,textB;
+		window.onload = function(){
+			// 选择图片A  
+			document.getElementById('fileA').onchange = function(){  		  
+				var img = event.target.files[0];  		  
+				// 判断是否图片  
+				if(!img){  
+					return ;  
+				}  		  
+				// 判断图片格式  
+				if(!(img.type.indexOf('image')==0 && img.type && /\.(?:jpg|png|gif)$/.test(img.name)) ){  
+					alert('图片只能是jpg,gif,png');  
+					return ;  
+				}  				
+				var reader = new FileReader();  			
+				reader.readAsDataURL(img);  
+				reader.onload = function(e){ // reader onload start  
+					var urlData = this.result;
+					document.getElementById("filecontentA").innerHTML += "<img width='120' height='120' src='" + urlData + "' />";
+					
+					// ajax 上传图片  
+					$.post("", { img: e.target.result},function(ret){  
+						if(ret.img!=''){  
+							alert('upload A success');  
+							idA=ret['img_id'];
+						}else{  
+							alert('upload fail');  
+						}  
+					},'json');  
+				} // reader onload end  
+			}  
+			
+			// 选择图片B 
+			document.getElementById('fileB').onchange = function(){  		  
+				var img = event.target.files[0];  		  
+				// 判断是否图片  
+				if(!img){  
+					return ;  
+				}  		  
+				// 判断图片格式  
+				if(!(img.type.indexOf('image')==0 && img.type && /\.(?:jpg|png|gif)$/.test(img.name)) ){  
+					alert('图片只能是jpg,gif,png');  
+					return ;  
+				}  				
+				var reader = new FileReader();  			
+				reader.readAsDataURL(img);  
+				reader.onload = function(e){ // reader onload start  
+					var urlData = this.result;
+					document.getElementById("filecontentB").innerHTML += "<img width='120' height='120' src='" + urlData + "' />";
+				
+					// ajax 上传图片  
+					$.post("", { img: e.target.result},function(ret){  
+						if(ret.img!=''){  
+							alert('upload B success');  				
+							idB=ret['img_id'];
+						}else{  
+							alert('upload fail');  
+						}  
+					},'json');  
+				} // reader onload end  
+			}	  
+	  }
+		
+		function compare(){
+			$.get("/?idA="+idA+"&idB="+idB,function(ret){  
+				if(ret.img!=''){  
+					document.getElementById("compareResult").innerHTML += "<p>" + ret['text'] + "</p>";
+					alert('upload success');
+					idA=null;
+					idB=null;
+				}else{  
+					alert('upload fail');  
+				}  
+			},'json');  
+		}
+	  
+	</script>  
+	
+    <body>
+        <div class="container kv-main">
+            <div class="page-header">
+            <h1>Couple like<small>			
+        </div>
+		
+        <form enctype="multipart/form-data">				
+			<div class="btn btn-primary btn-file">
+				<i class="glyphicon glyphicon-folder-open"></i><p>   </p>OpenA
+				<input id="fileA" class="file" type="file">
+			</div>
+			
+			<div class="btn btn-primary btn-file">
+				<i class="glyphicon glyphicon-folder-open"></i><p>   </p>OpenB
+				<input id="fileB" class="file" type="file">
+			</div>
+			
+			
+		</form>	
+		
+		<hr>
+		<form enctype="multipart/form-data">				
+			<div id="filecontentA"></div>  
+			<div id="filecontentB"></div>  
+		</form>			
+			
+		<hr>
+		<button type="submit" class="btn btn-primary" onclick="compare()">Submit</button>
+		<hr>
+		<div id = "compareResult"></div>
+		<br>
+	
+    </body>
+	
+</html>
