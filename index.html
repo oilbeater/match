@@ -4,14 +4,43 @@
     <head>
         <meta charset="UTF-8"/>
         <title>Krajee JQuery Plugins - &copy; Kartik</title>
+		<link rel="stylesheet" href="jqcloud.min.css">
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
         <link href="fileinput.css" media="all" rel="stylesheet" type="text/css" />
         <script src="http://libs.useso.com/js/jquery/2.1.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js" type="text/javascript"></script>
-    </head>
-	
+		<script src="jqcloud.min.js"></script>
+	</head>
+	<style>
+		.tagContainer {
+		  width: 200px;
+		  height: 200px;
+		  margin: 20px;
+		}
+    </style>
     <script type="text/javascript">  
 		var idA,idB,textA,textB;
+		var wordsA,wordsB;
+		function showTagCloudA(){	
+			$("#container1").jQCloud(wordsA, {
+				afterCloudRender: function() {				 
+					var text = $("#container1").text();
+					var biggest = $("#container1_word_0");
+					var smallest = $("#container1_word_" + (wordsA.length - 1));
+					var middle = $("#container1_word_2"); 
+				}
+			});			
+		}
+		function showTagCloudB(){	
+			$("#container2").jQCloud(wordsB, {
+				afterCloudRender: function() {				 
+					var text = $("#container2").text();
+					var biggest = $("#container2_word_0");
+					var smallest = $("#container2_word_" + (wordsA.length - 1));
+					var middle = $("#container2_word_2"); 
+				}
+			});			
+		}
 		window.onload = function(){
 			// 选择图片A  
 			document.getElementById('fileA').onchange = function(){  		  
@@ -29,13 +58,26 @@
 				reader.readAsDataURL(img);  
 				reader.onload = function(e){ // reader onload start  
 					var urlData = this.result;
-					document.getElementById("filecontentA").innerHTML += "<img width='200' src='" + urlData + "' />";
-					
+					document.getElementById("filecontentA").innerHTML += "<img width='120' src='" + urlData + "' />";
+							
 					// ajax 上传图片  
 					$.post("", { img: e.target.result},function(ret){  
 						if(ret.img!=''){  
-							alert(ret['text']);  
-							idA=ret['img_id'];
+							document.getElementById("fileTextA").innerHTML += "<p>" + ret['text'] + "</p>";
+							idA=ret['id'];
+							wordsA = [
+								{text: 'One', weight: 0},
+								{text: 'noeferer', weight: -3},
+								{text: 'Oilbeater', weight: -0.55},
+								{text: 'rererer', weight: '2.0'}
+							];
+							wordsA = [
+								{text: ret['text'][0], weight: 0},
+								{text: ret['text'][1], weight: -3},
+								{text: ret['text'][2], weight: -0.55},
+								{text: ret['text'][3], weight: '2.0'}
+							];
+							showTagCloudA();
 						}else{  
 							alert('upload fail');  
 						}  
@@ -59,33 +101,42 @@
 				reader.readAsDataURL(img);  
 				reader.onload = function(e){ // reader onload start  
 					var urlData = this.result;
-					document.getElementById("filecontentB").innerHTML += "<img width='200' src='" + urlData + "' />";
+					document.getElementById("filecontentB").innerHTML += "<img width='120' height='120' src='" + urlData + "' />";
+				
 				
 					// ajax 上传图片  
 					$.post("", { img: e.target.result},function(ret){  
 						if(ret.img!=''){  
-							alert(ret['text']);  				
-							idB=ret['img_id'];
+							document.getElementById("fileTextB").innerHTML += "<p>" + ret['text'] + "</p>";				
+							idB=ret['id'];
+							wordsB = [
+								{text: ret['text'][0], weight: 0},
+								{text: ret['text'][1], weight: -3},
+								{text: ret['text'][2], weight: -0.55},
+								{text: ret['text'][3], weight: '2.0'}
+							];
+							showTagCloudB();
 						}else{  
 							alert('upload fail');  
 						}  
 					},'json');  
 				} // reader onload end  
 			}	  
-	  }
-		
-		function compare(){
-			$.get("/compare?idA="+idA+"&idB="+idB,function(ret){  
-				if(ret.img!=''){  
-					document.getElementById("compareResult").innerHTML += "<p>" + ret['text'] + "</p>";
-					alert('upload success');
-					idA=null;
-					idB=null;
-				}else{  
-					alert('upload fail');  
-				}  
-			},'json');  
-		}
+	}
+	function compare(){
+		$.get("/?idA="+idA+"&idB="+idB,function(ret){  
+			if(ret.img!=''){  
+				document.getElementById("compareResult").innerHTML += "<p>" + ret['text'] + "</p>";
+				alert('upload success');
+				idA=null;
+				idB=null;
+				wordsA=null;
+				wordsB=null;
+			}else{  
+				alert('upload fail');  
+			}  
+		},'json');  
+	}
 	  
 	</script>  
 	
@@ -111,8 +162,10 @@
 		
 		<hr>
 		<form enctype="multipart/form-data">				
-			<div id="filecontentA"></div>  
-			<div id="filecontentB"></div>  
+			<div id="filecontentA"></div><div id="fileTextA"></div>
+			<div id="container1" class="tagContainer"></div>
+			<div id="filecontentB"></div><div id="fileTextB"></div>
+			<div id="container2" class="tagContainer"></div>
 		</form>			
 			
 		<hr>
