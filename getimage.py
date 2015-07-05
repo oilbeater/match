@@ -51,7 +51,7 @@ class MainHandler(tornado.web.RequestHandler):
         if gender == 'Male':
             result.append(str(age))
             result.append(u"帅哥")
-            if int(age) > 31:
+            if int(age) > 30:
                 result.append(u"老男人")
             else:
                 result.append(u"小鲜肉")
