@@ -10,6 +10,7 @@ import base64
 from tornado.escape import json_encode
 import os
 from urlparse import parse_qs, urlparse
+import math
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
@@ -28,16 +29,52 @@ class MainHandler(tornado.web.RequestHandler):
         f.write(base64.b64decode(s))
         f.close()
         x = api.detection.detect(img=File('1.jpg'))
-        message ={}
+        message = {}
+        print x
         if len(x['face']) != 0:
-            message['img_id'] = x['face'][0]['face_id']
-            message['text'] = u"帅爆了".encode('utf-8')
             print x
+            message['img_id'] = x['face'][0]['face_id']
+            message['text'] = self.guess(x)
+
         else:
             message['img_id'] = ""
-            message['text'] = u"你在逗我".encode('utf-8')
+            message['text'] = u"你不是人".encode('utf-8')
             print "Not a picture"
         self.write(json_encode(message))
+
+    def guess(self, face):
+        age = face['face'][0]['attribute']['age']['value']
+        gender = face['face'][0]['attribute']['gender']['value']
+        smiling = face['face'][0]['attribute']['smiling']['value']
+        result = []
+        if gender == 'Male':
+            result.append(str(age))
+            result.append(u"帅哥")
+            if int(age) > 31:
+                result.append(u"老男人")
+            else:
+                result.append(u"小鲜肉")
+            if smiling > 50:
+                result.append(u"心花怒放")
+            elif smiling < 5:
+                result.append(u"内心紧张")
+            else:
+                result.append(u"蓄势待发")
+        else:
+            result.append(age)
+            result.append(u"美女")
+            if int(age) > 31:
+                result.append(u"小女生")
+            else:
+                result.append(u"小女生")
+            if smiling > 50:
+                result.append(u"得意的笑")
+            elif smiling < 5:
+                result.append(u"楚楚可人")
+            else:
+                result.append(u"开心")
+
+        return result
 
 class CompareHandler(tornado.web.RequestHandler):
     def get(self):
@@ -59,9 +96,28 @@ class CompareHandler(tornado.web.RequestHandler):
             self.write(json_encode(message))
 
     def judge(self, face1, face2, similiar):
+        print face1['face_info'][0]['attribute']['gender']['value']
+        print face1['face_info'][0]['attribute']['age']['value']
+        print face1['face_info'][0]['attribute']['smiling']['value']
+        print face2['face_info'][0]['attribute']['gender']['value']
+        print face2['face_info'][0]['attribute']['age']['value']
+        print face2['face_info'][0]['attribute']['smiling']['value']
+        # temp = {u'face_info': [{u'url': None, u'attribute':
+        #     {u'gender': {u'confidence': 99.9995, u'value': u'Male'}, u'age': {u'range': 5, u'value': 30},
+        #      u'race': {u'confidence': 99.995, u'value': u'Asian'}, u'smiling': {u'value': 0.717482}}, u'faceset': [], u'person': [], u'tag': u'', u'img_id': u'33403fb43468d49468e8d206a67b85ba', u'position': {u'eye_left': {u'y': 53.277778, u'x': 37.85}, u'center': {u'y': 62.585034, u'x': 50.0}, u'width': 55.865922, u'mouth_left': {u'y': 76.586168, u'x': 39.467877}, u'height': 45.351474, u'mouth_right': {u'y': 76.668707, u'x': 59.82067}, u'nose': {u'y': 63.254195, u'x': 49.865084}, u'eye_right': {u'y': 53.65941, u'x': 62.284916}}, u'face_id': u'b48cb740bac8abd625cf8e4d03eb0402'}
         if float(similiar['similarity']) > 90:
-            print face1
             message = {'text': u"你就和自己过一辈子吧！".encode('utf-8')}
+        else:
+            if face1['face_info'][0]['attribute']['gender']['value'] == face2['face_info'][0]['attribute']['gender']['value'] == 'Male':
+                message = {'text': u"好基友一辈子！".encode('utf-8')}
+            if face1['face_info'][0]['attribute']['gender']['value'] == face2['face_info'][0]['attribute']['gender']['value'] == 'Female':
+                message = {'text': u"幸福姐妹二人组！".encode('utf-8')}
+            if face1['face_info'][0]['attribute']['gender']['value'] != face2['face_info'][0]['attribute']['gender']['value']:
+                if -8 < face1['face_info'][0]['attribute']['age']['value'] - face2['face_info'][0]['attribute']['age']['value'] < 8:
+                    print face1['face_info'][0]['attribute']['age']['value'] - face2['face_info'][0]['attribute']['age']['value']
+                    message = {'text': u"金童玉女，幸福一生！".encode('utf-8')}
+                else:
+                    message = {'text': u"老牛吃嫩草！".encode('utf-8')}
         return json_encode(message)
 
 application = tornado.web.Application([(r"/", MainHandler),
