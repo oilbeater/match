@@ -38,7 +38,8 @@ class MainHandler(tornado.web.RequestHandler):
 
         else:
             message['img_id'] = ""
-            message['text'] = u"你不是人".encode('utf-8')
+            text = [u"不是人".encode('utf-8'), u"不要搞笑".encode('utf-8'), u"要严肃".encode('utf-8'), u"你好奇怪".encode('utf-8')]
+            message['text'] = [u"不是人".encode('utf-8')]
             print "Not a picture"
         self.write(json_encode(message))
 
