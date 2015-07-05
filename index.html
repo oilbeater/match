@@ -75,7 +75,7 @@
 	  }
 		
 		function compare(){
-			$.get("/?idA="+idA+"&idB="+idB,function(ret){  
+			$.get("/compare?idA="+idA+"&idB="+idB,function(ret){  
 				if(ret.img!=''){  
 					document.getElementById("compareResult").innerHTML += "<p>" + ret['text'] + "</p>";
 					alert('upload success');
