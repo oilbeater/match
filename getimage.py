@@ -59,7 +59,10 @@ class CompareHandler(tornado.web.RequestHandler):
             self.write(json_encode(message))
 
     def judge(self, face1, face2, similiar):
-        return "Be together"
+        if float(similiar['similarity']) > 90:
+            print face1
+            message = {'text': u"你就和自己过一辈子吧！".encode('utf-8')}
+        return json_encode(message)
 
 application = tornado.web.Application([(r"/", MainHandler),
                                        (r"/compare", CompareHandler),
