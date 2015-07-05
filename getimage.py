@@ -122,7 +122,9 @@ class CompareHandler(tornado.web.RequestHandler):
 
 application = tornado.web.Application([(r"/", MainHandler),
                                        (r"/compare", CompareHandler),
-                                       (r"/(fileinput\.css)", tornado.web.StaticFileHandler, dict(path=os.path.join(os.path.dirname(__file__))))])
+                                       (r"/(fileinput\.css)", tornado.web.StaticFileHandler, dict(path=os.path.join(os.path.dirname(__file__)))),
+                                       (r"/(jqcloud\.min\.js)", tornado.web.StaticFileHandler, dict(path=os.path.join(os.path.dirname(__file__)))),
+                                       (r"/(jqcloud\.min\.css)", tornado.web.StaticFileHandler, dict(path=os.path.join(os.path.dirname(__file__))))])
 
 if __name__ == "__main__":
 
