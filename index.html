@@ -29,12 +29,12 @@
 				reader.readAsDataURL(img);  
 				reader.onload = function(e){ // reader onload start  
 					var urlData = this.result;
-					document.getElementById("filecontentA").innerHTML += "<img width='120' height='120' src='" + urlData + "' />";
+					document.getElementById("filecontentA").innerHTML += "<img width='200' src='" + urlData + "' />";
 					
 					// ajax 上传图片  
 					$.post("", { img: e.target.result},function(ret){  
 						if(ret.img!=''){  
-							alert('upload A success');  
+							alert(ret['text']);  
 							idA=ret['img_id'];
 						}else{  
 							alert('upload fail');  
@@ -59,12 +59,12 @@
 				reader.readAsDataURL(img);  
 				reader.onload = function(e){ // reader onload start  
 					var urlData = this.result;
-					document.getElementById("filecontentB").innerHTML += "<img width='120' height='120' src='" + urlData + "' />";
+					document.getElementById("filecontentB").innerHTML += "<img width='200' src='" + urlData + "' />";
 				
 					// ajax 上传图片  
 					$.post("", { img: e.target.result},function(ret){  
 						if(ret.img!=''){  
-							alert('upload B success');  				
+							alert(ret['text']);  				
 							idB=ret['img_id'];
 						}else{  
 							alert('upload fail');  
