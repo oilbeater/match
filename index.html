@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8"/>
-        <title>Krajee JQuery Plugins - &copy; Kartik</title>
+        <title>Couple Like</title>
 		<link rel="stylesheet" href="jqcloud.min.css">
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
         <link href="fileinput.css" media="all" rel="stylesheet" type="text/css" />
@@ -15,8 +15,11 @@
 		.tagContainer {
 		  width: 200px;
 		  height: 200px;
-		  margin: 20px;
 		}
+		.filecontentA {
+			float: left;
+		}
+
     </style>
     <script type="text/javascript">  
 		var idA,idB,textA,textB;
@@ -58,12 +61,11 @@
 				reader.readAsDataURL(img);  
 				reader.onload = function(e){ // reader onload start  
 					var urlData = this.result;
-					document.getElementById("filecontentA").innerHTML += "<img width='120' src='" + urlData + "' />";
+					document.getElementById("filecontentA").innerHTML += "<img width='200' src='" + urlData + "' />";
 							
 					// ajax 上传图片  
 					$.post("", { img: e.target.result},function(ret){  
 						if(ret.img!=''){  
-							document.getElementById("fileTextA").innerHTML += "<p>" + ret['text'] + "</p>";
 							idA=ret['img_id'];
 							wordsA = [
 								{text: ret['text'][0], weight: 0.3},
@@ -95,13 +97,12 @@
 				reader.readAsDataURL(img);  
 				reader.onload = function(e){ // reader onload start  
 					var urlData = this.result;
-					document.getElementById("filecontentB").innerHTML += "<img width='120' height='120' src='" + urlData + "' />";
+					document.getElementById("filecontentB").innerHTML += "<img width='200' src='" + urlData + "' />";
 				
 				
 					// ajax 上传图片  
 					$.post("", { img: e.target.result},function(ret){  
 						if(ret.img!=''){  
-							document.getElementById("fileTextB").innerHTML += "<p>" + ret['text'] + "</p>";				
 							idB=ret['img_id'];
 							wordsB = [
 								{text: ret['text'][0], weight: 0.3},
@@ -120,7 +121,7 @@
 	function compare(){
 		$.get("compare?idA="+idA+"&idB="+idB,function(ret){  
 			if(ret.img!=''){  
-				document.getElementById("compareResult").innerHTML += "<p>" + ret['text'] + "</p>";
+				document.getElementById("compareResult").innerHTML += "<h2>" + ret['text'] + "</h2>";
 				idA=null;
 				idB=null;
 				wordsA=null;
@@ -140,13 +141,13 @@
         </div>
 		
         <form enctype="multipart/form-data">				
-			<div class="btn btn-primary btn-file">
-				<i class="glyphicon glyphicon-folder-open"></i><p>   </p>OpenA
+			<div class="btn btn-primary btn-file" style= "margin-left: 40%;">
+				<i class="glyphicon glyphicon-folder-open"></i><p>   </p>NI
 				<input id="fileA" class="file" type="file">
 			</div>
 			
 			<div class="btn btn-primary btn-file">
-				<i class="glyphicon glyphicon-folder-open"></i><p>   </p>OpenB
+				<i class="glyphicon glyphicon-folder-open"></i><p>   </p>TA
 				<input id="fileB" class="file" type="file">
 			</div>
 			
@@ -155,15 +156,15 @@
 		
 		<hr>
 		<form enctype="multipart/form-data">				
-			<div id="filecontentA"></div><div id="fileTextA"></div>
+			<div id="filecontentA"></div>
 			<div id="container1" class="tagContainer"></div>
-			<div id="filecontentB"></div><div id="fileTextB"></div>
+			<div id="filecontentB"></div>
 			<div id="container2" class="tagContainer"></div>
 		</form>			
 			
 		<hr>
-		<button type="submit" class="btn btn-primary" onclick="compare()">Submit</button>
-		<hr>
+		<button type="submit" class="btn btn-primary" style="margin-left:35%" onclick="compare()">PEI BU PEI</button>
+		<br>
 		<div id = "compareResult"></div>
 		<br>
 	
