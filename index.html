@@ -54,7 +54,7 @@
 					alert('图片只能是jpg,gif,png');  
 					return ;  
 				}  				
-				var reader = new FileReader();  			
+				var reader = new FileReader();  	
 				reader.readAsDataURL(img);  
 				reader.onload = function(e){ // reader onload start  
 					var urlData = this.result;
@@ -64,18 +64,12 @@
 					$.post("", { img: e.target.result},function(ret){  
 						if(ret.img!=''){  
 							document.getElementById("fileTextA").innerHTML += "<p>" + ret['text'] + "</p>";
-							idA=ret['id'];
+							idA=ret['img_id'];
 							wordsA = [
-								{text: 'One', weight: 0},
-								{text: 'noeferer', weight: -3},
-								{text: 'Oilbeater', weight: -0.55},
-								{text: 'rererer', weight: '2.0'}
-							];
-							wordsA = [
-								{text: ret['text'][0], weight: 0},
-								{text: ret['text'][1], weight: -3},
-								{text: ret['text'][2], weight: -0.55},
-								{text: ret['text'][3], weight: '2.0'}
+								{text: ret['text'][0], weight: 0.3},
+								{text: ret['text'][1], weight: 0.2},
+								{text: ret['text'][2], weight: 0.4},
+								{text: ret['text'][3], weight: 0.2}
 							];
 							showTagCloudA();
 						}else{  
@@ -108,12 +102,12 @@
 					$.post("", { img: e.target.result},function(ret){  
 						if(ret.img!=''){  
 							document.getElementById("fileTextB").innerHTML += "<p>" + ret['text'] + "</p>";				
-							idB=ret['id'];
+							idB=ret['img_id'];
 							wordsB = [
-								{text: ret['text'][0], weight: 0},
-								{text: ret['text'][1], weight: -3},
-								{text: ret['text'][2], weight: -0.55},
-								{text: ret['text'][3], weight: '2.0'}
+								{text: ret['text'][0], weight: 0.3},
+								{text: ret['text'][1], weight: 0.2},
+								{text: ret['text'][2], weight: 0.4},
+								{text: ret['text'][3], weight: 0.2}
 							];
 							showTagCloudB();
 						}else{  
@@ -124,7 +118,7 @@
 			}	  
 	}
 	function compare(){
-		$.get("/?idA="+idA+"&idB="+idB,function(ret){  
+		$.get("compare?idA="+idA+"&idB="+idB,function(ret){  
 			if(ret.img!=''){  
 				document.getElementById("compareResult").innerHTML += "<p>" + ret['text'] + "</p>";
 				idA=null;
