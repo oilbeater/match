@@ -11,15 +11,17 @@
         <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js" type="text/javascript"></script>
 		<script src="jqcloud.min.js"></script>
 	</head>
-	<style>
+    <style>
 		.tagContainer {
 		  width: 200px;
 		  height: 200px;
+		  background-color: #ffffff;
+		  filter:alpha(opacity=70);
+		  opacity:0.7;		  
 		}
 		.filecontentA {
 			float: left;
 		}
-
     </style>
     <script type="text/javascript">  
 		var idA,idB,textA,textB;
@@ -61,7 +63,7 @@
 				reader.readAsDataURL(img);  
 				reader.onload = function(e){ // reader onload start  
 					var urlData = this.result;
-					document.getElementById("filecontentA").innerHTML += "<img width='200' src='" + urlData + "' />";
+					document.getElementById("filecontentA").innerHTML += "<img width='200' src='" + urlData + "' />"+"<div id='container1' class='tagContainer'></div>";
 							
 					// ajax 上传图片  
 					$.post("", { img: e.target.result},function(ret){  
@@ -97,7 +99,7 @@
 				reader.readAsDataURL(img);  
 				reader.onload = function(e){ // reader onload start  
 					var urlData = this.result;
-					document.getElementById("filecontentB").innerHTML += "<img width='200' src='" + urlData + "' />";
+					document.getElementById("filecontentB").innerHTML += "<img width='200' src='" + urlData + "' />"+"<div id='container2' class='tagContainer'></div>";
 				
 				
 					// ajax 上传图片  
@@ -134,7 +136,7 @@
 	  
 	</script>  
 	
-    <body>
+    <body style="background-image:url(love.jpg); background-size:cover;">
         <div class="container kv-main">
             <div class="page-header">
             <h1>Couple like<small>			
@@ -157,9 +159,7 @@
 		<hr>
 		<form enctype="multipart/form-data">				
 			<div id="filecontentA"></div>
-			<div id="container1" class="tagContainer"></div>
 			<div id="filecontentB"></div>
-			<div id="container2" class="tagContainer"></div>
 		</form>			
 			
 		<hr>

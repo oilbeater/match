@@ -73,7 +73,7 @@ class MainHandler(tornado.web.RequestHandler):
             elif smiling < 5:
                 result.append(u"楚楚可人")
             else:
-                result.append(u"开心")
+                result.append(u"淡定")
 
         return result
 
@@ -114,7 +114,7 @@ class CompareHandler(tornado.web.RequestHandler):
             if face1['face_info'][0]['attribute']['gender']['value'] == face2['face_info'][0]['attribute']['gender']['value'] == 'Female':
                 message = {'text': u"幸福姐妹二人组！".encode('utf-8')}
             if face1['face_info'][0]['attribute']['gender']['value'] != face2['face_info'][0]['attribute']['gender']['value']:
-                if -8 < face1['face_info'][0]['attribute']['age']['value'] - face2['face_info'][0]['attribute']['age']['value'] < 8:
+                if -10 < face1['face_info'][0]['attribute']['age']['value'] - face2['face_info'][0]['attribute']['age']['value'] < 10:
                     print face1['face_info'][0]['attribute']['age']['value'] - face2['face_info'][0]['attribute']['age']['value']
                     message = {'text': u"金童玉女，幸福一生！".encode('utf-8')}
                 else:
@@ -125,7 +125,8 @@ application = tornado.web.Application([(r"/", MainHandler),
                                        (r"/compare", CompareHandler),
                                        (r"/(fileinput\.css)", tornado.web.StaticFileHandler, dict(path=os.path.join(os.path.dirname(__file__)))),
                                        (r"/(jqcloud\.min\.js)", tornado.web.StaticFileHandler, dict(path=os.path.join(os.path.dirname(__file__)))),
-                                       (r"/(jqcloud\.min\.css)", tornado.web.StaticFileHandler, dict(path=os.path.join(os.path.dirname(__file__))))])
+                                       (r"/(jqcloud\.min\.css)", tornado.web.StaticFileHandler, dict(path=os.path.join(os.path.dirname(__file__)))),
+                                       (r"/(love\.jpg)", tornado.web.StaticFileHandler, dict(path=os.path.join(os.path.dirname(__file__))))])
 
 if __name__ == "__main__":
 
